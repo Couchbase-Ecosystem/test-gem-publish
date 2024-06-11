@@ -39,12 +39,14 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+    - run: bundle install    
     - run: bundle exec rspec
     env:
       ACTIVE_MODEL_VERSION: ${{ matrix.gemfile }}
       COUCHBASE_VERSION: ${{ matrix.couchbase }}
       BUNDLE_PATH: vendor/bundle
   deploy:
+    needs: test
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-20.04
     steps:
