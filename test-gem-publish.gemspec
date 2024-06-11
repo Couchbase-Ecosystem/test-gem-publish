@@ -10,14 +10,14 @@ Gem::Specification.new do |spec|
   spec.description   = %q{A simple Hello World gem for demonstration purposes}
   spec.homepage      = "http://example.com/hello_world_gem"
   spec.license       = "MIT"
-
+  
   spec.files         = Dir["lib/**/*.rb"]
-  spec.bindir        = "exe"
-  spec.executables   = spec.name
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 2.4", '< 2.5'
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.7"
   spec.add_development_dependency "minitest", "~> 5.0"
+
+  spec.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
 end
