@@ -1,7 +1,7 @@
 require_relative 'lib/hello_world_gem/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "hello_world_gem"
+  spec.name          = "test-gem-publish"
   spec.version       = HelloWorldGem::VERSION
   spec.authors       = ["Your Name"]
   spec.email         = ["your.email@example.com"]
