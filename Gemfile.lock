@@ -1,0 +1,23 @@
+PATH
+  remote: .
+  specs:
+    hello_world_gem (0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.23.0)
+    rake (13.2.1)
+
+PLATFORMS
+  arm64-darwin-23
+  ruby
+
+DEPENDENCIES
+  bundler (~> 2.0)
+  hello_world_gem!
+  minitest (~> 5.0)
+  rake (~> 13.0)
+
+BUNDLED WITH
+   2.5.3

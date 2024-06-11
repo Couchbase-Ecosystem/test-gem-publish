@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - master
+      - dev
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        include:
+          - ruby: '3.2'
+            gemfile: '7.1.0'
+            couchbase: '7.1.1'
+          - ruby: '3.0'
+            gemfile: '7.0.0'
+            couchbase: '6.6.5'
+          - ruby: '3.0'
+            gemfile: '7.0.0'
+            couchbase: '7.1.0'
+          - ruby: '2.7'
+            gemfile: '7.0.0'
+            couchbase: '7.1.0'
+      fail-fast: false
+    runs-on: ubuntu-20.04
+    name: ${{ matrix.ruby }} rails-${{ matrix.gemfile }}  couchbase-${{ matrix.couchbase }}
+    steps:
+    - uses: actions/checkout@v3
+    - run: sudo apt-get update && sudo apt-get install libevent-dev libev-dev python-httplib2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: bundle exec rspec
+    env:
+      ACTIVE_MODEL_VERSION: ${{ matrix.gemfile }}
+      COUCHBASE_VERSION: ${{ matrix.couchbase }}
+      BUNDLE_PATH: vendor/bundle
+  deploy:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2' # or your preferred Ruby version for deployment
+          bundler-cache: true
+      - run: bundle install
+      - run: gem build test-gem-publish.gemspec
+      - run: gem push test-gem-publish-*.gem
+        env:
+          BUNDLE_PATH: vendor/bundle
+          GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
