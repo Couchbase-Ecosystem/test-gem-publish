@@ -28,7 +28,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 2.0)
+  bundler (~> 2.4)
   hello_world_gem!
   minitest (~> 5.0)
   rake (~> 13.0)
