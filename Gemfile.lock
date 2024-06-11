@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hello_world_gem (0.1.0)
+    test-gem-publish (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -29,10 +29,10 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 2.4, < 2.5)
-  hello_world_gem!
   minitest (~> 5.0)
   rake (~> 13.0)
   rspec (~> 3.7)
+  test-gem-publish!
 
 BUNDLED WITH
    2.4.22
