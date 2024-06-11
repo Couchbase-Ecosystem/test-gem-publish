@@ -58,6 +58,9 @@ jobs:
           bundler-cache: true
       - run: bundle install
       - run: gem build test-gem-publish.gemspec
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/v})" >> $GITHUB_ENV
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -72,12 +75,12 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./test-gem-publish-*.gem
+          asset_path: ./test-gem-publish-${{ env.VERSION }}.gem
           asset_name: test-gem-publish-*.gem
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: gem push test-gem-publish-*.gem
+      - run: gem push test-gem-publish-${{ env.VERSION }}.gem
         env:
           BUNDLE_PATH: vendor/bundle
           GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
