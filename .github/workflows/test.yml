@@ -57,8 +57,27 @@ jobs:
           ruby-version: '3.2' # or your preferred Ruby version for deployment
           bundler-cache: true
       - run: bundle install
-      - run: gem build test-gem-publish.gemspec
-      - run: gem push test-gem-publish-*.gem
+      - run: gem build hello_world_gem.gemspec
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./hello_world_gem-*.gem
+          asset_name: hello_world_gem-*.gem
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: gem push hello_world_gem-*.gem
         env:
           BUNDLE_PATH: vendor/bundle
           GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
